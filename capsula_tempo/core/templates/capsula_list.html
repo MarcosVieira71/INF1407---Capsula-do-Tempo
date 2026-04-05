@@ -1,5 +1,17 @@
 <h1>Lista de cápsulas</h1>
 
+<p><a href="{% url 'criar' %}">Criar nova cápsula</a></p>
+
 {% for capsula in object_list %}
-    <p>{{ capsula.titulo }}</p>
+    <div>
+        <h2>{{ capsula.titulo }}</h2>
+        <p>Data de abertura: {{ capsula.data_abertura }}</p>
+        <p>Status: {% if capsula.finalizada %}Finalizada{% elif capsula.esta_aberta %}Aberta{% else %}Fechada{% endif %}</p>
+        <p>
+            <a href="{% url 'detalhe' capsula.pk %}">Ver cápsula</a>
+            | <a href="{% url 'deletar' capsula.pk %}">Excluir</a>
+        </p>
+    </div>
+{% empty %}
+    <p>Nenhuma cápsula criada.</p>
 {% endfor %}
