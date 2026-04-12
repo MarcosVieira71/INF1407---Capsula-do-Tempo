@@ -36,6 +36,7 @@ class CriarCapsula(LoginRequiredMixin, CreateView):
     
 class DeletarCapsula(LoginRequiredMixin, DeleteView):
     model = Capsula
+    template_name = 'capsula_confirm_delete.html'
     success_url = reverse_lazy('lista')
 
     def get_queryset(self):
