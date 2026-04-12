@@ -5,6 +5,17 @@ class CapsulaForm(forms.ModelForm):
     texto = forms.CharField(widget=forms.Textarea, required=False, label="Texto")
     imagem = forms.ImageField(required=False, label="Imagem")
     link = forms.URLField(required=False, label="Link")
+    data_abertura = forms.DateTimeField(
+        input_formats=[
+            "%d/%m/%Y",
+            "%d/%m/%y",
+        ],
+        label="Data de Abertura",
+        error_messages={
+            'invalid': 'Digite uma data válida (DD/MM/AAAA).',
+            'required': 'Informe uma data.',
+        }
+    )
 
     class Meta:
         model = Capsula

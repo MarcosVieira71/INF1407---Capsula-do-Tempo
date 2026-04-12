@@ -32,6 +32,9 @@ class Capsula(models.Model):
         return self.titulo
 
     def clean(self):
+        if not self.data_abertura:
+            return 
+            
         if self.data_abertura < timezone.now():
             raise ValidationError({
                 'data_abertura': 'A data de abertura não pode estar no passado.'
