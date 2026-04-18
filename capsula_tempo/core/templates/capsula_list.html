@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h1>Lista de cápsulas</h1>
 
 <p><a href="{% url 'criar' %}">Criar nova cápsula</a></p>
@@ -15,3 +19,5 @@
 {% empty %}
     <p>Nenhuma cápsula criada.</p>
 {% endfor %}
+
+{% endblock %}

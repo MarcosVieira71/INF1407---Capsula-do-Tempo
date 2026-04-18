@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, DeleteView, DetailView, UpdateView, TemplateView
+from django.contrib.auth.views import LoginView, LogoutView
 
-from .models import Capsula, ItemTexto, ItemImagem, ItemLink
-from .forms import CapsulaForm
+from .models import Capsula, ItemTexto, ItemImagem, ItemLink, Usuario
+from .forms import CapsulaForm, UsuarioCriarForm, UsuarioAtualizarForm
 
 class ListaCapsulas(LoginRequiredMixin, ListView):
     model = Capsula
@@ -49,3 +50,28 @@ class CapsulaDetail(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Capsula.objects.filter(usuario=self.request.user)
+
+class UsuarioLoginView(LoginView):
+    template_name = 'login.html'
+
+class UsuarioLogoutView(LogoutView):
+    next_page = 'login'
+
+class UsuarioCriaView(CreateView):
+    model = Usuario
+    form_class = UsuarioCriarForm
+    template_name = 'registro.html'
+    success_url = reverse_lazy('login')
+
+class UsuarioAtualizaView(LoginRequiredMixin, UpdateView):
+    model = Usuario
+    form_class = UsuarioAtualizarForm
+    template_name = 'perfil.html'
+    success_url = reverse_lazy('lista')
+
+    def get_object(self):
+        return self.request.user 
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
+

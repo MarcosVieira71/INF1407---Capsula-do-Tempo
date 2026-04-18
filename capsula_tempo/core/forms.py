@@ -1,5 +1,6 @@
 from django import forms
-from .models import Capsula, ItemTexto, ItemImagem, ItemLink
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import Capsula, Usuario, ItemTexto, ItemImagem, ItemLink
 
 class CapsulaForm(forms.ModelForm):
     texto = forms.CharField(widget=forms.Textarea, required=False, label="Texto")
@@ -31,3 +32,15 @@ class CapsulaForm(forms.ModelForm):
             raise forms.ValidationError("Você deve adicionar pelo menos um conteúdo (texto, imagem ou link) à cápsula.")
 
         return cleaned_data
+
+class UsuarioCriarForm(UserCreationForm):
+    class Meta:
+        model = Usuario
+        fields = ['username', 'nome', 'email']
+
+class UsuarioAtualizarForm(UserChangeForm):
+    password = None 
+
+    class Meta:
+        model = Usuario
+        fields = ['username', 'nome', 'email']
