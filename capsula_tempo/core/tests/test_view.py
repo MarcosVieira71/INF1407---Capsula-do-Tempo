@@ -11,7 +11,7 @@ class CapsulaViewTest(TestCase):
     def setUp(self):
         self.user = Usuario.objects.create_user(username='teste', password='123', email="teste@email.com")
 
-    def test_criar_capsula_logado(self):
+    def test_create_capsule_logged_in(self):
         self.client.login(username='teste', password='123')
 
         response = self.client.post(reverse('criar'), {
@@ -23,7 +23,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Capsula.objects.count(), 1)
 
-    def test_nao_cria_capsula_sem_conteudo(self):
+    def test_does_not_create_capsule_without_content(self):
         self.client.login(username='teste', password='123')
 
         response = self.client.post(reverse('criar'), {
@@ -34,7 +34,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(response.status_code, 200) 
         self.assertEqual(Capsula.objects.count(), 0)
 
-    def test_post_capsula_nao_logado(self):
+    def test_post_capsule_not_logged_in(self):
         response = self.client.post(reverse('criar'), {
             'titulo': 'Teste',
             'data_abertura': timezone.now() + timedelta(days=1)
@@ -43,7 +43,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Capsula.objects.count(), 0)
 
-    def test_capsula_associada_ao_usuario(self):
+    def test_capsule_associated_with_user(self):
         self.client.login(username='teste', password='123')
 
         self.client.post(reverse('criar'), {
@@ -56,7 +56,7 @@ class CapsulaViewTest(TestCase):
 
         self.assertEqual(capsula.usuario, self.user)
 
-    def test_abrir_capsula_antes_data_abertura(self):
+    def test_open_capsule_before_opening_date(self):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='Teste',
@@ -69,7 +69,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'A cápsula só pode ser aberta')
 
-    def test_abrir_capsula_apos_data_abertura(self):
+    def test_open_capsule_after_opening_date(self):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='Teste',
@@ -89,7 +89,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Mensagem aberta')
 
-    def test_capsula_nao_pode_ser_editada(self):
+    def test_capsule_cannot_be_edited(self):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='Original',
@@ -100,13 +100,13 @@ class CapsulaViewTest(TestCase):
         with self.assertRaises(ValueError):
             capsula.save()
 
-    def test_lista_capsulas_logado(self):
+    def test_list_capsules_logged_in(self):
         self.client.login(username='teste', password='123')
         response = self.client.get(reverse('lista'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Lista de cápsulas")
 
-    def test_lista_filtrada_por_usuario(self):
+    def test_list_filtered_by_user(self):
         user2 = Usuario.objects.create_user(username='outro', password='123', email="outro@email.com")
 
         Capsula.objects.create(usuario=self.user, titulo="Minha", data_abertura=timezone.now() + timedelta(days=1))
@@ -118,7 +118,7 @@ class CapsulaViewTest(TestCase):
         self.assertContains(response, "Minha")
         self.assertNotContains(response, "Outro")
 
-    def test_deletar_capsula(self):
+    def test_delete_capsule(self):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo="Teste",
@@ -131,7 +131,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Capsula.objects.count(), 0)
     
-    def test_nao_deleta_capsula_de_outro_usuario(self):
+    def test_does_not_delete_other_users_capsule(self):
         user2 = Usuario.objects.create_user(
             username='outro',
             password='123',
@@ -317,4 +317,15 @@ class AuthenticationTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
         self.assertContains(response, 'Você não está logado')
-        
+
+    def test_profile_icon_appears_when_logged_in(self):
+        self.client.login(username="existinguser", password="oldpass123")
+        response = self.client.get(reverse("lista"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "👤")
+        self.assertContains(response, "Olá, existinguser")
+
+    def test_profile_icon_links_to_profile_page(self):
+        self.client.login(username="existinguser", password="oldpass123")
+        response = self.client.get(reverse("lista"))
+        self.assertContains(response, "/perfil/")
