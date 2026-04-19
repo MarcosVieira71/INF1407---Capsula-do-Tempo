@@ -126,3 +126,5 @@ AUTH_USER_MODEL = 'core.Usuario'
 LOGIN_REDIRECT_URL = 'lista'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

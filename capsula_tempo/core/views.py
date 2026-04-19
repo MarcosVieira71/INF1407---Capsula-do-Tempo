@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView, DetailView, UpdateView, TemplateView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
 from .models import Capsula, ItemTexto, ItemImagem, ItemLink, Usuario
 from .forms import CapsulaForm, UsuarioCriarForm, UsuarioAtualizarForm
@@ -74,4 +74,19 @@ class UsuarioAtualizaView(LoginRequiredMixin, UpdateView):
 
 class HomeView(TemplateView):
     template_name = 'home.html'
+
+class UsuarioPasswordResetView(PasswordResetView):
+    template_name = 'password_reset_form.html'
+    email_template_name = 'password_reset_email.html'
+    success_url = reverse_lazy('password_reset_done')
+
+class UsuarioPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'password_reset_done.html'
+
+class UsuarioPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+class UsuarioPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'password_reset_complete.html'
 
