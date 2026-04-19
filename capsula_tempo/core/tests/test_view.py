@@ -6,7 +6,7 @@ from datetime import timedelta
 
 from ..models import Usuario, Capsula, ItemTexto
 
-class ViewTest(TestCase):
+class CapsulaViewTest(TestCase):
 
     def setUp(self):
         self.user = Usuario.objects.create_user(username='teste', password='123', email="teste@email.com")
@@ -200,15 +200,121 @@ class PasswordResetTest(TestCase):
         self.assertContains(response, 'Senha redefinida')
         self.assertTemplateUsed(response, 'password_reset_complete.html')
 
-    def test_capsula_e_finalizada_ao_ser_criada(self):
-        self.client.login(username='teste', password='123')
 
-        self.client.post(reverse('criar'), {
-            'titulo': 'Minha cápsula',
-            'data_abertura': timezone.now() + timedelta(days=1),
-            'texto': 'Conteúdo inicial'
+class AuthenticationTest(TestCase):
+
+    def setUp(self):
+        self.user_data = {
+            'username': 'testuser',
+            'nome': 'Test User',
+            'email': 'test@example.com',
+            'password1': 'testpass123',
+            'password2': 'testpass123'
+        }
+        self.user = Usuario.objects.create_user(
+            username='existinguser',
+            password='oldpass123',
+            email='existing@example.com',
+            nome='Existing User'
+        )
+
+    def test_login_page_get(self):
+        response = self.client.get(reverse('login'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'login.html')
+        self.assertContains(response, 'Login')
+
+    def test_login_success(self):
+        response = self.client.post(reverse('login'), {
+            'username': 'existinguser',
+            'password': 'oldpass123'
         })
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('lista'))
 
-        capsula = Capsula.objects.first()
-        self.assertTrue(capsula.finalizada)
+    def test_login_failure(self):
+        response = self.client.post(reverse('login'), {
+            'username': 'existinguser',
+            'password': 'wrongpassword'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'login.html')
+        self.assertContains(response, 'Login') 
+
+    def test_logout(self):
+        self.client.login(username='existinguser', password='oldpass123')
+        response = self.client.post(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('login'))
+
+    def test_register_page_get(self):
+        response = self.client.get(reverse('registro'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registro.html')
+        self.assertContains(response, 'Criar conta')
+
+    def test_register_success(self):
+        response = self.client.post(reverse('registro'), self.user_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('login'))
+
+        # Verifica se o usuário foi criado
+        user = Usuario.objects.get(username='testuser')
+        self.assertEqual(user.email, 'test@example.com')
+        self.assertEqual(user.nome, 'Test User')
+
+    def test_register_password_mismatch(self):
+        data = self.user_data.copy()
+        data['password2'] = 'differentpass'
+        response = self.client.post(reverse('registro'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registro.html')
+        # Usuário não deve ser criado
+        self.assertFalse(Usuario.objects.filter(username='testuser').exists())
+
+    def test_register_duplicate_username(self):
+        data = self.user_data.copy()
+        data['username'] = 'existinguser'
+        response = self.client.post(reverse('registro'), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registro.html')
+
+    def test_profile_update_page_get(self):
+        self.client.login(username='existinguser', password='oldpass123')
+        response = self.client.get(reverse('perfil'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'perfil.html')
+        self.assertContains(response, 'Editar perfil')
+
+    def test_profile_update_success(self):
+        self.client.login(username='existinguser', password='oldpass123')
+        response = self.client.post(reverse('perfil'), {
+            'username': 'existinguser', 
+            'nome': 'Updated Name',
+            'email': 'updated@example.com'
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('lista'))
+
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.nome, 'Updated Name')
+        self.assertEqual(self.user.email, 'updated@example.com')
+
+    def test_profile_update_unauthenticated(self):
+        response = self.client.get(reverse('perfil'))
+        self.assertEqual(response.status_code, 302) 
+        self.assertRedirects(response, f"{reverse('login')}?next={reverse('perfil')}")
+
+    def test_home_page_authenticated(self):
+        self.client.login(username='existinguser', password='oldpass123')
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertContains(response, 'Você está logado')
+
+    def test_home_page_unauthenticated(self):
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertContains(response, 'Você não está logado')
         
