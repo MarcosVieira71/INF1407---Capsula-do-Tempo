@@ -34,6 +34,22 @@ class CapsulaForm(forms.ModelForm):
         return cleaned_data
 
 class UsuarioCriarForm(UserCreationForm):
+    username = forms.CharField(
+        help_text = ''
+    )
+
+    password1 = forms.CharField(
+    label = "Senha",
+    widget = forms.PasswordInput,
+    help_text = ''
+    )
+
+    password2 = forms.CharField(
+        label ="Confirme a senha",
+        widget =forms.PasswordInput,
+        help_text=''
+    )
+
     class Meta:
         model = Usuario
         fields = ['username', 'nome', 'email']
