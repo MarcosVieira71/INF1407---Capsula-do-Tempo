@@ -1,45 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Cápsula do Tempo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div>
-    
-    <div>
-        <a href="{% url 'home' %}">Home</a> |
-        <a href="{% url 'lista' %}">Cápsulas</a> |
-        <a href="{% url 'criar' %}">Criar cápsula</a> |
-        <a href="{% url 'registro' %}">Criar usuário</a> |
-        <a href="{% url 'login' %}">Login</a>
+<a href="{% url 'home' %}" class="header-link">
+    <div class="clock-banner text-center">
+        <img src="{% static 'core/img/clock.png' %}" alt="Relógio" class="clock-img">
     </div>
 
-    <div>
-        {% if user.is_authenticated %}
-            Olá, {{ user.username }}
-            <a href="{% url 'perfil' %}" title="Editar perfil" style="margin-left: 10px; text-decoration: none;">
-                👤
+    <div class="title-banner text-center">
+        <h1 class="custom-title">
+        Cápsula do Tempo
+        </h1>
+    </div>
+</a>
+
+
+<nav class="navbar-custom">
+
+    {% if user.is_authenticated %}
+
+        <div class="nav-center">
+            <a href="{% url 'lista' %}" class="nav-item-frame">Cápsulas</a>
+            <a href="{% url 'criar' %}" class="nav-item-frame large">Criar cápsula</a>
+        </div>
+
+        <div class="nav-right">
+            
+            <a href="{% url 'perfil' %}" class="profile-link">
+                <img src="{% static 'core/img/perfil.png' %}" alt="Perfil">
+                <span class="user-text">Olá, {{ user.nome }}</span>
             </a>
+            
 
-            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button type="submit">Sair</button>
+                <button type="submit" class="logout-link nav-item-frame">Sair</button>
             </form>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'registro' %}">Registrar</a>
-            <a href="{% url 'password_reset' %}">Esqueci minha senha</a>
-        {% endif %}
-    </div>
+        </div>
 
+    {% else %}
+
+        <div class="nav-center">
+            <a href="{% url 'lista' %}" class="nav-item-frame">Cápsulas</a>
+            <a href="{% url 'criar' %}" class="nav-item-frame">Criar cápsula</a>
+            <a href="{% url 'login' %}" class="nav-item-frame">Login</a>
+            <a href="{% url 'registro' %}" class="nav-item-frame">Registro</a>
+            <a href="{% url 'password_reset' %}" class="nav-item-frame">Esqueci senha</a>
+        </div>
+
+    {% endif %}
+
+</nav>
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
 </div>
-
-<hr>
-
-{% block content %}
-{% endblock %}
 
 </body>
 </html>
