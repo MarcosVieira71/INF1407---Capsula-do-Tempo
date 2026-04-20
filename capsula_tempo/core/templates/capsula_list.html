@@ -1,23 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="list-header">
+    <h1 class="custom-title-list">Minhas Cápsulas</h1>
+</div>
 
-<h1>Minhas cápsulas do tempo</h1>
-
-<p><a href="{% url 'criar' %}">Criar nova cápsula</a></p>
-
-{% for capsula in object_list %}
-    <div>
-        <h2>{{ capsula.titulo }}</h2>
-        <p>Data de abertura: {{ capsula.data_abertura }}</p>
-        <p>Status: {% if capsula.finalizada %}Finalizada{% elif capsula.esta_aberta %}Aberta{% else %}Fechada{% endif %}</p>
-        <p>
-            <a href="{% url 'detalhe' capsula.pk %}">Ver cápsula</a>
-            | <a href="{% url 'deletar' capsula.pk %}">Excluir</a>
-        </p>
-    </div>
-{% empty %}
-    <p>Nenhuma cápsula criada.</p>
-{% endfor %}
-
+<div class="envelope-grid">
+    {% for capsula in object_list %}
+        <div class="envelope-wrapper">
+            <a href="{% if capsula.esta_aberta %}{% url 'detalhe' capsula.pk %}{% else %}#{% endif %}" 
+               class="envelope-card {% if capsula.esta_aberta %}can-open{% else %}locked{% endif %}">
+                
+                <div class="envelope-flap"></div>
+                
+                <div class="envelope-body">
+                    <h2 class="capsula-title title-spaced">{{ capsula.titulo }}</h2>
+                    <div class="capsula-info">
+                        <span>Abertura: {{ capsula.data_abertura|date:"d/m/Y" }}</span>
+                        <span class="status-badge">
+                            {% if capsula.esta_aberta %}Disponível{% else %}Selada{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </a>
+            <div class="envelope-actions">
+                <a href="{% url 'deletar' capsula.pk %}" class="delete-link">Excluir</a>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-center w-100">Sua jornada começa aqui. Nenhuma cápsula criada ainda.</p>
+    {% endfor %}
+</div>
 {% endblock %}
