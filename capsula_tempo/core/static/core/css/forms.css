@@ -1,0 +1,270 @@
+/* ================================
+   ESTILOS DE FORMULÁRIOS
+   ================================ */
+
+/* Container principal dos formulários */
+.form-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #f9f7f4;
+    border: 2px solid #d4c5b9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+/* Títulos de seção */
+.form-container h2 {
+    font-size: 28px;
+    font-weight: 300;
+    color: #2c2c2c;
+    margin-bottom: 30px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Parágrafo descritivo */
+.form-container > p:first-of-type {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+/* Container de formulário */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Parágrafos do formulário (gerados por as_p) */
+form p {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Labels dos campos */
+form label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+/* Campos de input, textarea e select */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form input[type="date"],
+form input[type="datetime-local"],
+form textarea,
+form select {
+    padding: 12px;
+    border: 1px solid #b8a89f;
+    border-radius: 4px;
+    font-family: "Cutive Mono", monospace;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus,
+form input[type="number"]:focus,
+form input[type="date"]:focus,
+form input[type="datetime-local"]:focus,
+form textarea:focus,
+form select:focus {
+    outline: none;
+    border-color: #8b0000;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.3);
+}
+
+/* Textarea específico */
+form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Botões de submit */
+button[type="submit"] {
+    background-color: #8b0000;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-family: "Cutive Mono", monospace;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #a00000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Botões secundários (cancelar, etc) */
+.btn-secondary {
+    background-color: #666;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-family: "Cutive Mono", monospace;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-secondary:hover {
+    background-color: #777;
+}
+
+/* Botão de perigo (delete) */
+.btn-danger {
+    background-color: #8b0000;
+}
+
+.btn-danger:hover {
+    background-color: #a00000;
+}
+
+/* Mensagens de erro */
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+}
+
+.errorlist li {
+    color: #d9534f;
+    font-size: 14px;
+    padding: 4px 8px;
+    background-color: #f2dede;
+    border: 1px solid #ebcccc;
+    border-radius: 3px;
+    margin-bottom: 8px;
+}
+
+form p.has-error {
+    margin-bottom: 28px;
+}
+
+/* Texto de ajuda do campo */
+.helptext {
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Links dentro de formulários */
+.form-container a {
+    color: #8b0000;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.form-container a:hover {
+    color: #a00000;
+    text-decoration: underline;
+}
+
+/* Modal de confirmação */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #f9f7f4;
+    padding: 30px;
+    border-radius: 4px;
+    max-width: 400px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border: 2px solid #d4c5b9;
+}
+
+.modal-content h5 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: 300;
+    color: #2c2c2c;
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.modal-content form {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+}
+
+.modal-content form button,
+.modal-content form a {
+    flex: 1;
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 25px;
+        margin: 20px 10px;
+        max-width: 100%;
+    }
+
+    .form-container h2 {
+        font-size: 24px;
+    }
+
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="password"],
+    form input[type="number"],
+    form input[type="date"],
+    form input[type="datetime-local"],
+    form textarea,
+    form select {
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 20px;
+    }
+}
