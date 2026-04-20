@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'core/css/capsula_list.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="list-header">
@@ -24,11 +29,25 @@
                 </div>
             </a>
             <div class="envelope-actions">
-                <a href="{% url 'deletar' capsula.pk %}" class="delete-link">Excluir</a>
+                <a href="{% url 'lista' %}?delete={{ capsula.pk }}" class="delete-link">Excluir</a>
             </div>
         </div>
     {% empty %}
         <p class="text-center w-100">Sua jornada começa aqui. Nenhuma cápsula criada ainda.</p>
     {% endfor %}
 </div>
+
+{% if capsula_to_delete %}
+<div class="modal-overlay">
+    <div class="modal-content">
+        <h5>Confirmar Exclusão</h5>
+        <p>Tem certeza que deseja deletar a cápsula "{{ capsula_to_delete.titulo }}"?</p>
+        <form method="post" action="{% url 'deletar' capsula_to_delete.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Sim, deletar</button>
+            <a href="{% url 'lista' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

@@ -14,6 +14,17 @@ class ListaCapsulas(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Capsula.objects.filter(usuario=self.request.user)
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        delete_id = self.request.GET.get('delete')
+        if delete_id:
+            try:
+                capsula = Capsula.objects.get(pk=delete_id, usuario=self.request.user)
+                context['capsula_to_delete'] = capsula
+            except Capsula.DoesNotExist:
+                pass
+        return context
+    
 class CriarCapsula(LoginRequiredMixin, CreateView):
     model = Capsula
     form_class = CapsulaForm
@@ -37,11 +48,14 @@ class CriarCapsula(LoginRequiredMixin, CreateView):
     
 class DeletarCapsula(LoginRequiredMixin, DeleteView):
     model = Capsula
-    template_name = 'capsula_confirm_delete.html'
     success_url = reverse_lazy('lista')
 
     def get_queryset(self):
         return Capsula.objects.filter(usuario=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        # Redirect GET requests to the list page with delete parameter
+        return redirect(reverse('lista') + '?delete=' + str(kwargs['pk']))
 
 class CapsulaDetail(LoginRequiredMixin, DetailView):
     model = Capsula
