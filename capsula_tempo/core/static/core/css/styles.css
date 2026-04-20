@@ -1,10 +1,68 @@
+/* Layout Base e Espaços Laterais */
 body {
+    position: relative;
     font-family: "Cutive Mono", monospace;
     font-size: 20px;
     color: #222;
-    font-weight: 400;
+    margin: 0;
+    padding: 0;
 }
 
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Topo Direito - Perfil e Sair */
+.nav-right {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.profile-link img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.user-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.logout-button-styled {
+    background-color: #8b0000;
+    color: white;
+    border: none;
+    padding: 6px 18px;
+    font-family: "Cutive Mono", monospace;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logout-button-styled:hover {
+    background-color: #a00000;
+}
+
+/* Banner e Título */
 .clock-banner {
     padding: 10px 0;
 }
@@ -17,17 +75,14 @@ body {
     margin: 10px 0;
 }
 
-
 .custom-title {
     font-weight: 300;
     font-size: 36px;
-    font-style: normal;
-    color: #222;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
+/* Navegação Central */
 .navbar-custom {
-    position: relative;
     margin: 20px 0;
 }
 
@@ -41,20 +96,16 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding: 10px 20px;
     min-width: 200px;
     height: 80px;
     white-space: nowrap;
-
     background-image: url("/static/core/img/frame1.png");
     background-size: cover;
     background-position: center;
-
     text-decoration: none;
     color: #2c2c2c;
     font-size: 16px;
-
     transition: transform 0.2s;
 }
 
@@ -62,54 +113,74 @@ body {
     transform: scale(1.05);
 }
 
-.profile-link {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    text-decoration: none;
-    color: #333;
-    transition: transform 0.2s;
-}
-
-.profile-link:hover {
-    transform: scale(1.05);
-}
-
-.profile-link img {
-    width: 60px;
-    height: 60px;
-}
-
-.logout-link {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #8b0000;
-    font-family: inherit;
-    font-size: 20px;
-}
-
-.nav-center {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-}
-
-
-.nav-right {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: 400;
-}
-
 .header-link {
     text-decoration: none;
     color: inherit;
     display: block;
+}
+
+/* Efeito Máquina de Escrever e Textos da Home */
+.home-container {
+    max-width: 900px;
+    margin: 40px auto;
+    line-height: 1.6;
+}
+
+.typewriter-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.typewriter-text {
+    font-family: "Cutive Mono", monospace;
+    font-size: 1.5rem;
+    border-right: 3px solid #8b0000;
+    white-space: nowrap;
+    overflow: hidden;
+    letter-spacing: 0.1em;
+    display: inline-block;
+
+    width: 100%;
+    max-width: fit-content;
+
+    animation:
+        typing 4s steps(45, end),
+        blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0
+    }
+
+    to {
+        width: 100%
+    }
+}
+
+@keyframes blink-caret {
+
+    from,
+    to {
+        border-color: transparent
+    }
+
+    50% {
+        border-color: #8b0000;
+    }
+}
+
+.home-text-body p {
+    text-align: justify;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 18px;
+}
+
+.highlight-text {
+    font-style: italic;
+    margin-top: 30px;
+    text-align: center !important;
 }

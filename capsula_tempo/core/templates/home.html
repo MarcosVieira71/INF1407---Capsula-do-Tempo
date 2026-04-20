@@ -1,12 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Bem-vindo à Cápsula do Tempo</h1>
+<div class="home-container">
+    <div class="typewriter-section">
+        <h2 class="typewriter-text">Algumas coisas merecem ser guardadas com cuidado.</h2>
+    </div>
 
-{% if user.is_authenticated %}
-    <p>Você está logado.</p>
-{% else %}
-    <p>Você não está logado.</p>
-{% endif %}
-
+    <div class="home-text-body">
+        <p>Uma lembrança simples. Um pensamento que surgiu do nada. Uma música que você não quer esquecer. Ou até quem você é hoje — antes que o tempo mude tudo de novo.</p>
+        
+        <p>Esta é a sua <strong>cápsula do tempo</strong>. Um espaço só seu, onde você pode registrar momentos, ideias, sentimentos e detalhes que um dia significarão muito mais.</p>
+        
+        <p class="highlight-text">
+            Escreva para o seu “eu” do futuro. <br>
+            Porque, às vezes, o mais interessante não é lembrar… <span>é redescobrir.</span>
+        </p>
+    </div>
+</div>
+    
 {% endblock %}

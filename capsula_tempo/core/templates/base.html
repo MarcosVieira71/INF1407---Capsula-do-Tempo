@@ -10,60 +10,47 @@
 </head>
 <body>
 
-<a href="{% url 'home' %}" class="header-link">
-    <div class="clock-banner text-center">
-        <img src="{% static 'core/img/clock.png' %}" alt="Relógio" class="clock-img">
-    </div>
-
-    <div class="title-banner text-center">
-        <h1 class="custom-title">
-        Cápsula do Tempo
-        </h1>
-    </div>
-</a>
-
-
-<nav class="navbar-custom">
-
     {% if user.is_authenticated %}
+    <div class="nav-right">
+        <a href="{% url 'perfil' %}" class="profile-link">
+            <img src="{% static 'core/img/perfil.png' %}" alt="Perfil">
+            <span class="user-text">Olá, {{ user.nome }}</span>
+        </a>
 
-        <div class="nav-center">
-            <a href="{% url 'lista' %}" class="nav-item-frame">Cápsulas</a>
-            <a href="{% url 'criar' %}" class="nav-item-frame large">Criar cápsula</a>
-        </div>
-
-        <div class="nav-right">
-            
-            <a href="{% url 'perfil' %}" class="profile-link">
-                <img src="{% static 'core/img/perfil.png' %}" alt="Perfil">
-                <span class="user-text">Olá, {{ user.nome }}</span>
-            </a>
-            
-
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="logout-link nav-item-frame">Sair</button>
-            </form>
-        </div>
-
-    {% else %}
-
-        <div class="nav-center">
-            <a href="{% url 'lista' %}" class="nav-item-frame">Cápsulas</a>
-            <a href="{% url 'criar' %}" class="nav-item-frame">Criar cápsula</a>
-            <a href="{% url 'login' %}" class="nav-item-frame">Login</a>
-            <a href="{% url 'registro' %}" class="nav-item-frame">Registro</a>
-            <a href="{% url 'password_reset' %}" class="nav-item-frame">Esqueci senha</a>
-        </div>
-
+        <form method="post" action="{% url 'logout' %}" class="m-0">
+            {% csrf_token %}
+            <button type="submit" class="logout-button-styled">Sair</button>
+        </form>
+    </div>
     {% endif %}
 
-</nav>
+    <div class="main-container">
+        <a href="{% url 'home' %}" class="header-link">
+            <div class="clock-banner text-center">
+                <img src="{% static 'core/img/clock.png' %}" alt="Relógio" class="clock-img">
+            </div>
+            <div class="title-banner text-center">
+                <h1 class="custom-title">Cápsula do Tempo</h1>
+            </div>
+        </a>
 
-<div class="container">
-    {% block content %}
-    {% endblock %}
-</div>
+        <nav class="navbar-custom">
+            <div class="nav-center">
+                <a href="{% url 'lista' %}" class="nav-item-frame">Cápsulas</a>
+                <a href="{% url 'criar' %}" class="nav-item-frame large">Criar cápsula</a>
+                
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'login' %}" class="nav-item-frame">Login</a>
+                    <a href="{% url 'registro' %}" class="nav-item-frame">Registrar</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
 
 </body>
 </html>
