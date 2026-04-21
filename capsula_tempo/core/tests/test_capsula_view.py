@@ -1,3 +1,10 @@
+"""
+Testes de interface e lógica de negócio para o gerenciamento de Cápsulas.
+
+Este módulo valida o ciclo de vida das cápsulas do tempo, incluindo criação, 
+listagem filtrada, restrições de abertura por data e edição protegida por senha.
+"""
+
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -8,11 +15,14 @@ from ..models import Usuario, Capsula, ItemTexto
 
 
 class CapsulaViewTest(TestCase):
+    """Conjunto de testes para as views relacionadas às Cápsulas."""
 
     def setUp(self):
+        """Prepara o ambiente de teste com um usuário padrão."""
         self.user = Usuario.objects.create_user(username='teste', password='123', email="teste@email.com")
 
     def test_create_capsule_logged_in(self):
+        """Verifica se um usuário logado consegue criar uma cápsula com sucesso."""
         self.client.login(username='teste', password='123')
 
         response = self.client.post(reverse('criar'), {
@@ -26,6 +36,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(Capsula.objects.count(), 1)
 
     def test_does_not_create_capsule_without_content(self):
+        """Garante que uma cápsula não seja criada se faltarem campos obrigatórios."""
         self.client.login(username='teste', password='123')
 
         response = self.client.post(reverse('criar'), {
@@ -37,6 +48,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(Capsula.objects.count(), 0)
 
     def test_post_capsule_not_logged_in(self):
+        """Verifica se usuários anônimos são impedidos de criar novas cápsulas."""
         response = self.client.post(reverse('criar'), {
             'titulo': 'Teste',
             'data_abertura': timezone.localdate()+ timedelta(days=1)
@@ -46,6 +58,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(Capsula.objects.count(), 0)
 
     def test_capsule_associated_with_user(self):
+        """Confirma se a cápsula recém-criada é vinculada corretamente ao autor."""
         self.client.login(username='teste', password='123')
 
         self.client.post(reverse('criar'), {
@@ -60,6 +73,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(capsula.usuario, self.user)
 
     def test_open_capsule_before_opening_date(self):
+        """Garante que o conteúdo da cápsula permaneça oculto antes da data de abertura."""
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='capsula-teste',
@@ -79,6 +93,7 @@ class CapsulaViewTest(TestCase):
         self.assertNotContains(response, 'conteudo-teste')
 
     def test_open_capsule_after_opening_date(self):
+        """Verifica se o conteúdo é liberado para visualização após atingir a data de abertura."""
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='capsula-teste',
@@ -101,12 +116,14 @@ class CapsulaViewTest(TestCase):
 
 
     def test_list_capsules_logged_in(self):
+        """Valida se a página de listagem carrega corretamente para usuários autenticados."""
         self.client.login(username='teste', password='123')
         response = self.client.get(reverse('lista'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Minhas Cápsulas")
 
     def test_list_filtered_by_user(self):
+        """Garante que um usuário veja apenas as suas próprias cápsulas e não as de terceiros."""
         user2 = Usuario.objects.create_user(username='outro', password='123', email="outro@email.com")
 
         Capsula.objects.create(usuario=self.user, titulo="Minha", data_abertura=timezone.localdate()+ timedelta(days=1))
@@ -119,6 +136,7 @@ class CapsulaViewTest(TestCase):
         self.assertNotContains(response, "Outro")
 
     def test_delete_capsule(self):
+        """Verifica se o proprietário consegue excluir sua cápsula."""
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo="Teste",
@@ -132,6 +150,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(Capsula.objects.count(), 0)
     
     def test_does_not_delete_other_users_capsule(self):
+        """Impede que um usuário exclua uma cápsula que não lhe pertence."""
         user2 = Usuario.objects.create_user(
             username='outro',
             password='123',
@@ -150,6 +169,7 @@ class CapsulaViewTest(TestCase):
         self.assertNotEqual(response.status_code, 200)
 
     def test_editing_without_auth(self):
+        """Garante que a edição seja bloqueada se a permissão de edição não estiver na sessão."""
         self.client.login(username='teste', password='123')
 
         self.client.post(reverse('criar'), {
@@ -177,6 +197,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(capsula.titulo, 'EditTest')
 
     def test_auth_edition_with_wrong_password(self):
+        """Valida o redirecionamento e erro ao tentar autorizar edição com senha incorreta."""
         self.client.login(username='teste', password='123')
 
         self.client.post(reverse('criar'), {
@@ -199,6 +220,7 @@ class CapsulaViewTest(TestCase):
         )
 
     def test_editing_with_correct_password(self):
+        """Verifica o fluxo completo de edição após a autorização bem-sucedida por senha."""
         self.client.login(username='teste', password='123')
 
         abertura_original = timezone.localdate()+ timedelta(days=1)
@@ -240,6 +262,7 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(capsula.titulo, 'Titulo Editado')
 
     def test_password_cannot_be_changed(self):
+        """Garante a integridade da senha, impedindo alterações diretas no campo após a criação."""
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='SenhaTest',
