@@ -61,35 +61,42 @@ class CapsulaViewTest(TestCase):
     def test_open_capsule_before_opening_date(self):
         capsula = Capsula.objects.create(
             usuario=self.user,
-            titulo='Teste',
-            data_abertura=timezone.localdate()+ timedelta(days=1)
+            titulo='capsula-teste',
+            data_abertura=timezone.localdate() + timedelta(days=7)
         )
+
+        ItemTexto.objects.create(capsula=capsula, texto='conteudo-teste')
 
         self.client.login(username='teste', password='123')
         response = self.client.get(reverse('detalhe', args=[capsula.pk]))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'A cápsula só pode ser aberta')
+        
+        self.assertContains(response, 'Esta cápsula ainda está selada')
+        self.assertContains(response, capsula.data_abertura.strftime('%d/%m/%Y'))
+        
+        self.assertNotContains(response, 'conteudo-teste')
 
     def test_open_capsule_after_opening_date(self):
         capsula = Capsula.objects.create(
             usuario=self.user,
-            titulo='Teste',
-            data_abertura=timezone.localdate()+ timedelta(days=1)
+            titulo='capsula-teste',
+            data_abertura=timezone.localdate() + timedelta(days=1)
         )
+        ItemTexto.objects.create(capsula=capsula, texto='conteudo-teste')
 
-        #simula passagem do tempo aqui atualizando dentro do banco
         Capsula.objects.filter(pk=capsula.pk).update(
-            data_abertura=timezone.localdate()- timedelta(days=1)
+            data_abertura=timezone.localdate() - timedelta(days=1)
         )
-
-        ItemTexto.objects.create(capsula=capsula, texto='Mensagem aberta')
 
         self.client.login(username='teste', password='123')
         response = self.client.get(reverse('detalhe', args=[capsula.pk]))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Mensagem aberta')
+        
+        self.assertContains(response, 'conteudo-teste') 
+        
+        self.assertNotContains(response, 'Esta cápsula ainda está selada')
 
 
     def test_list_capsules_logged_in(self):
@@ -424,3 +431,4 @@ class AuthenticationTest(TestCase):
         self.client.login(username="existinguser", password="oldpass123")
         response = self.client.get(reverse("lista"))
         self.assertContains(response, "/perfil/")
+    

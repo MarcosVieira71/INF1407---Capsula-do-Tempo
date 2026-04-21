@@ -135,6 +135,9 @@ class AutorizarEdicaoView(LoginRequiredMixin, View):
     def post(self, request, pk):
         capsula = get_object_or_404(Capsula, pk=pk, usuario=request.user)
 
+        if capsula.esta_aberta():
+            return redirect('lista')
+
         senha = request.POST.get('senha', '')
 
         if capsula.check_senha(senha):
@@ -153,6 +156,10 @@ class EditarCapsulaView(LoginRequiredMixin, View):
         )
 
         capsula = item.capsula
+
+        if capsula.esta_aberta():
+            return redirect('lista')
+
         session_key = f'capsula_edit_{capsula.pk}'
 
         if not request.session.get(session_key):

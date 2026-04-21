@@ -30,7 +30,9 @@
             </a>
             <div class="envelope-actions">
                 <a href="{% url 'lista' %}?delete={{ capsula.pk }}" class="delete-link">Excluir</a>
+                {% if not capsula.esta_aberta %}
                 <a href="{% url 'lista' %}?edit={{ capsula.pk }}" class="edit-link">Editar</a>
+                {% endif %}
             </div>
         </div>
     {% empty %}
