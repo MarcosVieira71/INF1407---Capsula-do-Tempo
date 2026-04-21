@@ -30,6 +30,7 @@
             </a>
             <div class="envelope-actions">
                 <a href="{% url 'lista' %}?delete={{ capsula.pk }}" class="delete-link">Excluir</a>
+                <a href="{% url 'lista' %}?edit={{ capsula.pk }}" class="edit-link">Editar</a>
             </div>
         </div>
     {% empty %}
@@ -46,6 +47,77 @@
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Sim, deletar</button>
             <a href="{% url 'lista' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% if capsula_to_edit %}
+<div class="modal-overlay">
+    <div class="modal-content">
+        <h5>Editar cápsula "{{ capsula_to_edit.titulo }}"</h5>
+        <p>Insira a senha de edição para continuar.</p>
+        {% if wrong_password %}
+            <p class="text-danger">Senha incorreta. Tente novamente.</p>
+        {% endif %}
+        <form method="post" action="{% url 'autorizar_edicao' capsula_to_edit.pk %}">
+            {% csrf_token %}
+            <label for="senha">Senha</label>
+            <input id="senha" type="password" name="senha" required />
+            <div style="margin-top:10px;">
+                <button type="submit" class="btn btn-primary">Autenticar</button>
+                <a href="{% url 'lista' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% if capsula_to_edit_form %}
+<div class="modal-overlay">
+    <div class="modal-content">
+        <h5>Editando: {{ capsula_to_edit_form.titulo }}</h5>
+
+        {% if edit_error %}
+            <p class="text-danger">
+                Verifique os dados informados. O texto, título e data são obrigatórios.
+            </p>
+        {% endif %}
+
+        <form method="post" action="{% url 'editar_itemtexto' itemtexto_to_edit.pk %}">
+            {% csrf_token %}
+
+            <label for="titulo">Título</label>
+            <input
+                id="titulo"
+                type="text"
+                name="titulo"
+                value="{{ capsula_to_edit_form.titulo }}"
+                style="width:100%;"
+                required
+            />
+
+            <label for="data_abertura" style="margin-top:10px;">Data de abertura</label>
+            <input
+                id="data_abertura"
+                type="date"
+                name="data_abertura"
+                value="{{ capsula_to_edit_form.data_abertura|date:'Y-m-d' }}"
+                style="width:100%;"
+                required
+            />
+
+            <label for="texto" style="margin-top:10px;">Texto</label>
+            <textarea
+                id="texto"
+                name="texto"
+                rows="8"
+                style="width:100%;"
+            >{{ itemtexto_to_edit.texto }}</textarea>
+
+            <div style="margin-top:10px;">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a href="{% url 'lista' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
         </form>
     </div>
 </div>

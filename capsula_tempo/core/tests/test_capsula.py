@@ -17,7 +17,7 @@ class CapsulaTest(TestCase):
         capsula = Capsula(
             usuario=self.user,
             titulo="Teste",
-            data_abertura=timezone.now() - timedelta(days=1)
+            data_abertura=timezone.localdate() - timedelta(days=1)
         )
 
         with self.assertRaises(ValidationError):
@@ -27,7 +27,7 @@ class CapsulaTest(TestCase):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo="Teste",
-            data_abertura=timezone.now() + timedelta(days=1)
+            data_abertura=timezone.localdate() + timedelta(days=1)
         )
         self.assertFalse(capsula.esta_aberta())
 
@@ -35,9 +35,9 @@ class CapsulaTest(TestCase):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo="Teste",
-            data_abertura=timezone.now() + timedelta(days=1)
+            data_abertura=timezone.localdate() + timedelta(days=1)
         )
 
-        capsula.data_abertura = timezone.now() - timedelta(days=1)
+        capsula.data_abertura = timezone.localdate() - timedelta(days=1)
 
         self.assertTrue(capsula.esta_aberta())

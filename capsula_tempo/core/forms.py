@@ -1,11 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import Capsula, Usuario, ItemTexto, ItemImagem, ItemLink
+from .models import Capsula, Usuario, ItemTexto
 
 class CapsulaForm(forms.ModelForm):
-    texto = forms.CharField(widget=forms.Textarea, required=False, label="Texto")
-    imagem = forms.ImageField(required=False, label="Imagem")
-    link = forms.URLField(required=False, label="Link")
+    texto = forms.CharField(widget=forms.Textarea, required=True, label="Texto")
+    senha = forms.CharField(widget=forms.PasswordInput, required=True, label="Senha de edição")
     data_abertura = forms.DateTimeField(
         input_formats=[
             "%d/%m/%Y",
@@ -25,11 +24,9 @@ class CapsulaForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         texto = cleaned_data.get('texto')
-        imagem = cleaned_data.get('imagem')
-        link = cleaned_data.get('link')
 
-        if not texto and not imagem and not link:
-            raise forms.ValidationError("Você deve adicionar pelo menos um conteúdo (texto, imagem ou link) à cápsula.")
+        if not texto:
+            raise forms.ValidationError("Você deve adicionar um texto à cápsula.")
 
         return cleaned_data
 

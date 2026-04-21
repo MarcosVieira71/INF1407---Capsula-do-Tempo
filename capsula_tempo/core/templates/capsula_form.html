@@ -10,7 +10,7 @@
 <div class="form-container">
     <h2>Criar cápsula</h2>
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Salvar</button>

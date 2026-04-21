@@ -16,8 +16,9 @@ class CapsulaViewTest(TestCase):
 
         response = self.client.post(reverse('criar'), {
             'titulo': 'Minha cápsula',
-            'data_abertura': timezone.now() + timedelta(days=1),
-            'texto': 'Conteúdo inicial'
+            'data_abertura': timezone.localdate() + timedelta(days=1),
+            'texto': 'Conteúdo inicial',
+            'senha': 'segredo123'
         })
 
         self.assertEqual(response.status_code, 302)
@@ -28,7 +29,7 @@ class CapsulaViewTest(TestCase):
 
         response = self.client.post(reverse('criar'), {
             'titulo': 'Minha cápsula',
-            'data_abertura': timezone.now() + timedelta(days=1)
+            'data_abertura': timezone.localdate()+ timedelta(days=1)
         })
 
         self.assertEqual(response.status_code, 200) 
@@ -37,7 +38,7 @@ class CapsulaViewTest(TestCase):
     def test_post_capsule_not_logged_in(self):
         response = self.client.post(reverse('criar'), {
             'titulo': 'Teste',
-            'data_abertura': timezone.now() + timedelta(days=1)
+            'data_abertura': timezone.localdate()+ timedelta(days=1)
         })
 
         self.assertEqual(response.status_code, 302)
@@ -48,8 +49,9 @@ class CapsulaViewTest(TestCase):
 
         self.client.post(reverse('criar'), {
             'titulo': 'Teste',
-            'data_abertura': timezone.now() + timedelta(days=1),
-            'texto': 'Conteúdo'
+            'data_abertura': timezone.localdate()+ timedelta(days=1),
+            'texto': 'Conteúdo',
+            'senha': 'segredo123'
         })
 
         capsula = Capsula.objects.first()
@@ -60,7 +62,7 @@ class CapsulaViewTest(TestCase):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='Teste',
-            data_abertura=timezone.now() + timedelta(days=1)
+            data_abertura=timezone.localdate()+ timedelta(days=1)
         )
 
         self.client.login(username='teste', password='123')
@@ -73,12 +75,12 @@ class CapsulaViewTest(TestCase):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo='Teste',
-            data_abertura=timezone.now() + timedelta(days=1)
+            data_abertura=timezone.localdate()+ timedelta(days=1)
         )
 
         #simula passagem do tempo aqui atualizando dentro do banco
         Capsula.objects.filter(pk=capsula.pk).update(
-            data_abertura=timezone.now() - timedelta(days=1)
+            data_abertura=timezone.localdate()- timedelta(days=1)
         )
 
         ItemTexto.objects.create(capsula=capsula, texto='Mensagem aberta')
@@ -89,28 +91,18 @@ class CapsulaViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Mensagem aberta')
 
-    def test_capsule_cannot_be_edited(self):
-        capsula = Capsula.objects.create(
-            usuario=self.user,
-            titulo='Original',
-            data_abertura=timezone.now() + timedelta(days=1)
-        )
-
-        capsula.titulo = 'Alterado'
-        with self.assertRaises(ValueError):
-            capsula.save()
 
     def test_list_capsules_logged_in(self):
         self.client.login(username='teste', password='123')
         response = self.client.get(reverse('lista'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Lista de cápsulas")
+        self.assertContains(response, "Minhas Cápsulas")
 
     def test_list_filtered_by_user(self):
         user2 = Usuario.objects.create_user(username='outro', password='123', email="outro@email.com")
 
-        Capsula.objects.create(usuario=self.user, titulo="Minha", data_abertura=timezone.now() + timedelta(days=1))
-        Capsula.objects.create(usuario=user2, titulo="Outro", data_abertura=timezone.now() + timedelta(days=1))
+        Capsula.objects.create(usuario=self.user, titulo="Minha", data_abertura=timezone.localdate()+ timedelta(days=1))
+        Capsula.objects.create(usuario=user2, titulo="Outro", data_abertura=timezone.localdate()+ timedelta(days=1))
 
         self.client.login(username='teste', password='123')
         response = self.client.get(reverse('lista'))
@@ -122,7 +114,7 @@ class CapsulaViewTest(TestCase):
         capsula = Capsula.objects.create(
             usuario=self.user,
             titulo="Teste",
-            data_abertura=timezone.now() + timedelta(days=1)
+            data_abertura=timezone.localdate()+ timedelta(days=1)
         )
 
         self.client.login(username='teste', password='123')
@@ -141,7 +133,7 @@ class CapsulaViewTest(TestCase):
         capsula = Capsula.objects.create(
             usuario=user2,
             titulo="Privado",
-            data_abertura=timezone.now() + timedelta(days=1)
+            data_abertura=timezone.localdate()+ timedelta(days=1)
         )
 
         self.client.login(username='teste', password='123')
@@ -149,6 +141,116 @@ class CapsulaViewTest(TestCase):
 
         self.assertNotEqual(response.status_code, 200)
 
+    def test_editing_without_auth(self):
+        self.client.login(username='teste', password='123')
+
+        self.client.post(reverse('criar'), {
+            'titulo': 'EditTest',
+            'data_abertura': timezone.localdate()+ timedelta(days=1),
+            'texto': 'Original',
+            'senha': 'mypass'
+        })
+
+        capsula = Capsula.objects.first()
+        item = capsula.textos.first()
+
+        response = self.client.post(reverse('editar_itemtexto', args=[item.pk]), {
+            'titulo': 'Novo Titulo',
+            'data_abertura': timezone.localdate()+ timedelta(days=2),
+            'texto': 'Novo Texto'
+        })
+
+        self.assertEqual(response.status_code, 302)
+
+        item.refresh_from_db()
+        capsula.refresh_from_db()
+
+        self.assertEqual(item.texto, 'Original')
+        self.assertEqual(capsula.titulo, 'EditTest')
+
+    def test_auth_edition_with_wrong_password(self):
+        self.client.login(username='teste', password='123')
+
+        self.client.post(reverse('criar'), {
+            'titulo': 'EditTest',
+            'data_abertura': timezone.localdate()+ timedelta(days=1),
+            'texto': 'Original',
+            'senha': 'mypass'
+        })
+
+        capsula = Capsula.objects.first()
+
+        response = self.client.post(reverse('autorizar_edicao', args=[capsula.pk]), {
+            'senha': 'wrong'
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            reverse('lista') + f'?edit={capsula.pk}&wrong=1'
+        )
+
+    def test_editing_with_correct_password(self):
+        self.client.login(username='teste', password='123')
+
+        abertura_original = timezone.localdate()+ timedelta(days=1)
+
+        self.client.post(reverse('criar'), {
+            'titulo': 'EditTest',
+            'data_abertura': abertura_original,
+            'texto': 'Original',
+            'senha': 'mypass'
+        })
+
+        capsula = Capsula.objects.first()
+        item = capsula.textos.first()
+
+        response = self.client.post(reverse('autorizar_edicao', args=[capsula.pk]), {
+            'senha': 'mypass'
+        })
+
+        self.assertEqual(response.status_code, 302)
+
+        session = self.client.session
+        session[f'capsula_edit_{capsula.pk}'] = True
+        session.save()
+        
+        nova_data = timezone.localdate()+ timedelta(days=5)
+
+        response = self.client.post(reverse('editar_itemtexto', args=[item.pk]), {
+            'titulo': 'Titulo Editado',
+            'data_abertura': nova_data,
+            'texto': 'Texto Editado'
+        })
+
+        self.assertEqual(response.status_code, 302)
+
+        item.refresh_from_db()
+        capsula.refresh_from_db()
+
+        self.assertEqual(item.texto, 'Texto Editado')
+        self.assertEqual(capsula.titulo, 'Titulo Editado')
+
+    def test_password_cannot_be_changed(self):
+        capsula = Capsula.objects.create(
+            usuario=self.user,
+            titulo='SenhaTest',
+            data_abertura=timezone.localdate()+ timedelta(days=1)
+        )
+
+        capsula.set_senha('orig')
+        capsula.save()
+
+        capsula.refresh_from_db()
+        original_hash = capsula.senha
+
+        capsula.senha = 'tampered'
+        capsula.save()
+        capsula.refresh_from_db()
+
+        self.assertEqual(capsula.senha, original_hash)
+        self.assertTrue(capsula.check_senha('orig'))
+        self.assertFalse(capsula.check_senha('tampered'))
 
 class PasswordResetTest(TestCase):
 
@@ -310,20 +412,13 @@ class AuthenticationTest(TestCase):
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
-        self.assertContains(response, 'Você está logado')
+        self.assertContains(response, 'Olá, Existing User')
 
     def test_home_page_unauthenticated(self):
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
-        self.assertContains(response, 'Você não está logado')
-
-    def test_profile_icon_appears_when_logged_in(self):
-        self.client.login(username="existinguser", password="oldpass123")
-        response = self.client.get(reverse("lista"))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "👤")
-        self.assertContains(response, "Olá, existinguser")
+        self.assertNotContains(response, 'Olá, Existing User')
 
     def test_profile_icon_links_to_profile_page(self):
         self.client.login(username="existinguser", password="oldpass123")

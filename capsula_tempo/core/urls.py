@@ -1,6 +1,10 @@
 from django.urls import path
 
-from core.views import ListaCapsulas, DeletarCapsula, CriarCapsula, CapsulaDetail, UsuarioLoginView, UsuarioLogoutView, UsuarioCriaView, UsuarioAtualizaView, HomeView, UsuarioPasswordResetView, UsuarioPasswordResetDoneView, UsuarioPasswordResetConfirmView, UsuarioPasswordResetCompleteView
+from core.views import ListaCapsulas, DeletarCapsula, CriarCapsula, CapsulaDetail
+from core.views import UsuarioLoginView, UsuarioLogoutView, UsuarioCriaView, UsuarioAtualizaView
+from core.views import UsuarioPasswordResetView, UsuarioPasswordResetDoneView, UsuarioPasswordResetConfirmView 
+from core.views import UsuarioPasswordResetCompleteView, HomeView
+from core.views import AutorizarEdicaoView, EditarCapsulaView
 
 urlpatterns = [
     path('', ListaCapsulas.as_view(), name='lista'),
@@ -16,4 +20,6 @@ urlpatterns = [
     path('password_reset/done/', UsuarioPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', UsuarioPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', UsuarioPasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('autorizar_edicao/<int:pk>/', AutorizarEdicaoView.as_view(), name='autorizar_edicao'),
+    path('editar_texto/<int:itemtexto_pk>/', EditarCapsulaView.as_view(), name='editar_itemtexto'),
 ]
