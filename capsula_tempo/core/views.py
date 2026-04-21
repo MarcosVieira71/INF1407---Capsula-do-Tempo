@@ -12,6 +12,7 @@ from .views_auth import (
     UsuarioLogoutView,
     UsuarioCriaView,
     UsuarioAtualizaView,
+    UsuarioAtualizaSenhaView,
     HomeView,
     UsuarioPasswordResetView,
     UsuarioPasswordResetDoneView,
@@ -30,6 +31,7 @@ __all__ = [
     'UsuarioLogoutView',
     'UsuarioCriaView',
     'UsuarioAtualizaView',
+    'UsuarioAtualizaSenhaView'
     'HomeView',
     'UsuarioPasswordResetView',
     'UsuarioPasswordResetDoneView',

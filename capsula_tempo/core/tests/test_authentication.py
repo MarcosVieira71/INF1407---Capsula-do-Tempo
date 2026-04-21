@@ -132,6 +132,50 @@ class AuthenticationTest(TestCase):
         response = self.client.get(reverse('perfil'))
         self.assertEqual(response.status_code, 302) 
         self.assertRedirects(response, f"{reverse('login')}?next={reverse('perfil')}")
+    
+    def test_password_change_page_get(self):
+        """Verifica se a página de alteração de senha é acessível para usuários logados."""
+        self.client.login(username='existinguser', password='oldpass123')
+        response = self.client.get(reverse('alterar_senha'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'alterar_senha.html')
+
+    def test_password_change_success(self):
+        """Valida a troca de senha quando a senha antiga está correta."""
+        self.client.login(username='existinguser', password='oldpass123')
+        
+        response = self.client.post(reverse('alterar_senha'), {
+            'old_password': 'oldpass123',
+            'new_password1': 'newsecurepass456',
+            'new_password2': 'newsecurepass456'
+        })
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('perfil'))
+        
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password('newsecurepass456'))
+
+    def test_password_change_wrong_old_password(self):
+        """Garante que a senha não seja alterada se a senha antiga estiver incorreta."""
+        self.client.login(username='existinguser', password='oldpass123')
+        
+        response = self.client.post(reverse('alterar_senha'), {
+            'old_password': 'wrong_old_password',
+            'new_password1': 'newsecurepass456',
+            'new_password2': 'newsecurepass456'
+        })
+        
+        self.assertEqual(response.status_code, 200)
+        self.user.refresh_from_db()
+        
+        self.assertTrue(self.user.check_password('oldpass123'))
+
+    def test_password_change_unauthenticated(self):
+        """Verifica se usuários não logados são impedidos de acessar a troca de senha."""
+        response = self.client.get(reverse('alterar_senha'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('login'), response.url)
 
     def test_home_page_authenticated(self):
         """Verifica se a Home exibe a saudação personalizada para usuários logados."""

@@ -14,8 +14,10 @@ from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetConfirmView,
     PasswordResetCompleteView,
+    PasswordChangeView
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 
 from .models import Usuario
@@ -56,6 +58,17 @@ class UsuarioAtualizaView(LoginRequiredMixin, UpdateView):
         """Retorna o usuário logado atualmente para garantir que ele edite apenas o próprio perfil."""
         return self.request.user 
 
+
+class UsuarioAtualizaSenhaView(LoginRequiredMixin, SuccessMessageMixin, PasswordChangeView):
+    """
+    View para alteração de senha do usuário autenticado.
+    
+    Exige a senha atual para validar a identidade e solicita a nova senha
+    com confirmação.
+    """
+    template_name = 'alterar_senha.html'
+    success_url = reverse_lazy('perfil')
+    success_message = "Sua senha foi alterada com sucesso!"
 
 class HomeView(TemplateView):
     """Exibe a página inicial pública ou de boas-vindas do projeto."""
