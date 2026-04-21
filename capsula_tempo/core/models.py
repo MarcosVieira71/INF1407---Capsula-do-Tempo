@@ -25,6 +25,9 @@ class Capsula(models.Model):
     def tem_conteudo(self):
         return self.textos.exists()
     
+    def pode_ser_editada(self):
+        return not self.esta_aberta()
+    
     def __str__(self):
         return self.titulo
 

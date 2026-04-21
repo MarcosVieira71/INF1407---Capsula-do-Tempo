@@ -1,15 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView, DetailView, UpdateView, TemplateView
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.views import View
-from django.utils.dateparse import parse_date
 
 
 from .models import Capsula, ItemTexto, Usuario
-from .forms import CapsulaForm, UsuarioCriarForm, UsuarioAtualizarForm
+from .forms import CapsulaForm, CapsulaEdicaoForm, UsuarioCriarForm, UsuarioAtualizarForm
+from .mixins import CapsulaEditMixin
 
 class ListaCapsulas(LoginRequiredMixin, ListView):
     model = Capsula
@@ -43,7 +42,7 @@ class ListaCapsulas(LoginRequiredMixin, ListView):
                 capsula = Capsula.objects.get(pk=edit_form_id, usuario=self.request.user)
                 item = capsula.textos.first()
                 if not item:
-                    item = ItemTexto.objects.create(capsula=capsula, texto='')
+                    item = ItemTexto(capsula=capsula, texto='')
                 context['capsula_to_edit_form'] = capsula
                 context['itemtexto_to_edit'] = item
                 context['edit_error'] = self.request.GET.get('error')
@@ -59,19 +58,19 @@ class CriarCapsula(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.usuario = self.request.user
-        # set edit password (hashed) on creation
         raw_senha = form.cleaned_data.get('senha')
-        response = super().form_valid(form)
+        texto = form.cleaned_data.get('texto')
 
-        capsula = self.object
+        capsula = form.save(commit=False)
         if raw_senha:
             capsula.set_senha(raw_senha)
-            capsula.save()
+        capsula.save()
 
-        if form.cleaned_data.get('texto'):
-            ItemTexto.objects.create(capsula=capsula, texto=form.cleaned_data['texto'])
+        if texto:
+            ItemTexto.objects.create(capsula=capsula, texto=texto)
 
-        return response
+        self.object = capsula
+        return redirect(self.get_success_url())
     
 class DeletarCapsula(LoginRequiredMixin, DeleteView):
     model = Capsula
@@ -81,7 +80,6 @@ class DeletarCapsula(LoginRequiredMixin, DeleteView):
         return Capsula.objects.filter(usuario=self.request.user)
 
     def get(self, request, *args, **kwargs):
-        # Redirect GET requests to the list page with delete parameter
         return redirect(reverse('lista') + '?delete=' + str(kwargs['pk']))
 
 class CapsulaDetail(LoginRequiredMixin, DetailView):
@@ -131,59 +129,42 @@ class UsuarioPasswordResetConfirmView(PasswordResetConfirmView):
 class UsuarioPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'password_reset_complete.html'
 
-class AutorizarEdicaoView(LoginRequiredMixin, View):
+class AutorizarEdicaoView(LoginRequiredMixin, CapsulaEditMixin, View):
     def post(self, request, pk):
-        capsula = get_object_or_404(Capsula, pk=pk, usuario=request.user)
+        capsula = self.get_capsula(pk)
 
-        if capsula.esta_aberta():
+        if not capsula.pode_ser_editada():
             return redirect('lista')
 
         senha = request.POST.get('senha', '')
 
         if capsula.check_senha(senha):
-            request.session[f'capsula_edit_{pk}'] = True
-            request.session.modified = True
+            self.authorize_edit_session(capsula)
             return redirect(reverse('lista') + f'?edit_form={pk}')
 
         return redirect(reverse('lista') + f'?edit={pk}&wrong=1')
 
-class EditarCapsulaView(LoginRequiredMixin, View):
+class EditarCapsulaView(LoginRequiredMixin, CapsulaEditMixin, View):
     def post(self, request, itemtexto_pk):
-        item = get_object_or_404(
-            ItemTexto,
-            pk=itemtexto_pk,
-            capsula__usuario=request.user
-        )
+        item = ItemTexto.objects.filter(pk=itemtexto_pk, capsula__usuario=request.user).first()
 
-        capsula = item.capsula
+        if item:
+            capsula = item.capsula
+        else:
+            capsula = self.get_capsula(itemtexto_pk)
+            item = capsula.textos.first()
 
-        if capsula.esta_aberta():
+        if not capsula.pode_ser_editada():
             return redirect('lista')
 
-        session_key = f'capsula_edit_{capsula.pk}'
-
-        if not request.session.get(session_key):
+        if not self.is_edit_session_authorized(capsula):
             return redirect(reverse('lista') + f'?edit={capsula.pk}')
 
-        texto = request.POST.get('texto', '').strip()
-        titulo = request.POST.get('titulo', '').strip()
-        data_abertura_str = request.POST.get('data_abertura', '').strip()
-
-        if not texto or not titulo or not data_abertura_str:
+        form = CapsulaEdicaoForm(request.POST, instance=capsula)
+        if not form.is_valid():
             return redirect(reverse('lista') + f'?edit_form={capsula.pk}&error=1')
 
-        data_abertura = parse_date(data_abertura_str)
+        form.save(item=item)
 
-        if not data_abertura:
-            return redirect(reverse('lista') + f'?edit_form={capsula.pk}&error=1')
-
-        item.texto = texto
-        item.save()
-
-        capsula.titulo = titulo
-        capsula.data_abertura = data_abertura
-        capsula.save()
-
-        request.session.pop(session_key, None)
-
+        self.clear_edit_session(capsula)
         return redirect(reverse('lista'))
