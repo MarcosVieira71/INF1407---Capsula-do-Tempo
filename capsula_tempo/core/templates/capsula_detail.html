@@ -1,26 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'core/css/capsula_detail.css' %}">
+{% endblock %}
 
 {% block content %}
+<div class="view-capsula-container">
+    <header class="capsula-header">
+        <h1 class="capsula-detalhe-titulo">{{ capsula.titulo }}</h1>
+        <div class="capsula-meta">
+            <span><i class="bi bi-calendar-event"></i> Selada em: {{ capsula.data_criacao|date:"d/m/Y" }}</span>
+            <span><i class="bi bi-unlock"></i> Aberta em: {{ capsula.data_abertura|date:"d/m/Y" }}</span>
+        </div>
+    </header>
 
-<h1>{{ capsula.titulo }}</h1>
-<p>Data de abertura: {{ capsula.data_abertura }}</p>
-<p>Status:{% if capsula.esta_aberta %}Aberta{% else %}Fechada{% endif %}</p>
+    <hr class="divider">
 
-{% if capsula.esta_aberta %}
-    <h2>Conteúdo</h2>
-    {% if capsula.textos.exists %}
-        <h3>Textos</h3>
-        {% for item in capsula.textos.all %}
-            <p>{{ item.texto }}</p>
-        {% endfor %}
-    {% else %}
-        <p>Esta cápsula não possui conteúdo de texto.</p>
-    {% endif %}
+    <div class="capsula-content-area">
+        {% if capsula.esta_aberta %}
+            <div class="paper-letter">
+                <h3 class="letter-greeting">Querido eu do futuro...</h3>
+                
+                {% if capsula.textos.all %}
+                    {% for item in capsula.textos.all %}
+                        <div class="text-item">
+                            {{ item.texto|linebreaks }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-msg">Esta cápsula está vazia. O silêncio também faz parte do tempo.</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="locked-message">
+                <i class="bi bi-lock-fill" style="font-size: 3rem; color: #822;"></i>
+                <h2>Esta cápsula ainda está selada.</h2>
+                <p>O tempo ainda não completou seu ciclo. Volte em <strong>{{ capsula.data_abertura|date:"d/m/Y" }}</strong>.</p>
+            </div>
+        {% endif %}
+    </div>
 
-{% else %}
-    <p>A cápsula só pode ser aberta depois de {{ capsula.data_abertura }}.</p>
-{% endif %}
-
-<p><a href="{% url 'lista' %}">Voltar para a lista</a></p>
-
+    <footer class="capsula-footer">
+        <a href="{% url 'lista' %}" class="btn-back">
+            <i class="bi bi-arrow-left"></i> Voltar para a Galeria
+        </a>
+    </footer>
+</div>
 {% endblock %}

@@ -6,6 +6,8 @@
 .list-header {
     text-align: center;
     margin-bottom: 75px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .custom-title-list {
@@ -29,6 +31,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 30px;
 }
 
 /* Cartão do envelope - estrutura principal */
@@ -102,32 +105,27 @@
     color: #555;
 }
 
+.envelope-grid p.text-center {
+    grid-column: 1 / -1;
+    width: 100%;
+    text-align: center;
+    padding: 40px 0;
+    font-family: "Cutive Mono", monospace;
+}
+
 /* ====================================
    INTERATIVIDADE - ENVELOPE ABERTO
    ==================================== */
 
-.envelope-card.can-open:hover {
+.envelope-card.open-envelope:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
 }
 
-.envelope-card.can-open:hover .envelope-flap {
+.envelope-card.open-envelope:hover .envelope-flap {
     transform: rotateX(155deg);
     z-index: 0;
-}
-
-/* ====================================
-   ESTADO - ENVELOPE FECHADO
-   ==================================== */
-
-.envelope-card.locked {
-    background-color: #f5f5f5;
-    border-color: #eee;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.envelope-card.locked .envelope-body {
-    opacity: 0.6;
 }
 
 /* ====================================
@@ -173,6 +171,17 @@
 }
 
 .delete-link:hover {
+    text-decoration: underline;
+}
+
+.edit-link {
+    font-size: 14px;
+    color: #222;
+    text-decoration: none;
+    font-family: "Cutive Mono", monospace;
+}
+
+.edit-link:hover {
     text-decoration: underline;
 }
 

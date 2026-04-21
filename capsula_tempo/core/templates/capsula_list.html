@@ -13,8 +13,8 @@
 <div class="envelope-grid">
     {% for capsula in object_list %}
         <div class="envelope-wrapper">
-            <a href="{% if capsula.esta_aberta %}{% url 'detalhe' capsula.pk %}{% else %}#{% endif %}" 
-               class="envelope-card {% if capsula.esta_aberta %}can-open{% else %}locked{% endif %}">
+            <a href="{% url 'detalhe' capsula.pk %}" 
+               class="envelope-card open-envelope {% if capsula.esta_aberta %}can-open{% else %}locked{% endif %}">
                 
                 <div class="envelope-flap"></div>
                 
@@ -34,7 +34,7 @@
             </div>
         </div>
     {% empty %}
-        <p class="text-center w-100">Sua jornada começa aqui. Nenhuma cápsula criada ainda.</p>
+        <p class="text-center">Sua jornada começa aqui. Nenhuma cápsula criada ainda.</p>
     {% endfor %}
 </div>
 
