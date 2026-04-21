@@ -1,4 +1,8 @@
+#!/bin/sh
+
 set -e
+
+cd /app/capsula_tempo
 
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
