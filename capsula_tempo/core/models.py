@@ -21,9 +21,6 @@ class Capsula(models.Model):
     
     def esta_aberta(self):
         return timezone.localdate() >= self.data_abertura
-
-    def tem_conteudo(self):
-        return self.textos.exists()
     
     def pode_ser_editada(self):
         return not self.esta_aberta()
