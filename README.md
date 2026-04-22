@@ -30,7 +30,15 @@ Para testar a aplicação diretamente no navegador, acesse o link:
 👉 **(https://capsuladotempo.onrender.com/)**
 
 ### 2. Execução em ambiente local
-Caso deseje rodar o projeto em sua máquina, certifique-se de que tem o Python instalado e siga os passos:
+Caso deseje rodar o projeto em sua máquina, certifique-se de que tem o Python instalado e siga os passos a seguir.
+
+Você deve configurar o arquivo .env na raiz do projeto. Abaixo está um exemplo:
+
+```bash
+SECRET_KEY=teste
+DEBUG=1
+ALLOWED_HOSTS=localhost,127.0.0.1
+```
 
 ```bash
 # 1. Clonar o repositório
@@ -92,7 +100,7 @@ Altere as informações que desejar por meio do formulário e clique em "Salvar"
 <img src="https://github.com/user-attachments/assets/dc184633-8161-4cc5-a61a-bc73677d9bd1" width="400px" />
 </div>
 
-Para alterar a sua senha, insira a senha antiga e confirme. 
+Para alterar a sua senha, insira a senha antiga e confirme a nova. 
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/40f88264-18f7-4465-a8f7-9507ffcab616" width="400px" />
