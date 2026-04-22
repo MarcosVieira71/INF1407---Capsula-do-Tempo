@@ -68,8 +68,49 @@ Preencha o formulário com o username e a senha que você criou ao se registrar 
 
 <img width="1259" height="834" alt="image" src="https://github.com/user-attachments/assets/8efe8a51-1f1a-4c13-80c9-a3aa6e1c21bc" />
 
+### 3. Edição do perfil
+Para editar seu perfil, clique em "Olá, [seu username] ou na imagem da moldura no topo direito do site.
+
+<img width="1714" height="382" alt="image" src="https://github.com/user-attachments/assets/8896411e-c461-42f5-ad88-709a3375bda1" />
+
+Altere as informações que desejar por meio do formulário e clique em "Salvar" ou clique em "Alterar senha" caso deseje trocar a sua senha.
+
+<img width="684" height="793" alt="image" src="https://github.com/user-attachments/assets/dc184633-8161-4cc5-a61a-bc73677d9bd1" />
+
+Para alterar a sua senha, insira a senha antiga e confirme. 
+
+<img width="637" height="897" alt="image" src="https://github.com/user-attachments/assets/40f88264-18f7-4465-a8f7-9507ffcab616" />
+
+### 4. Criação de cápsulas do tempo
+Para criar uma cápsula do tempo, você precisa estar logado. Para mais informações sobre registro e login, veja as seções 1 e 2. Quando estiver pronto, clique em "Criar cápsula".
+
+<img width="984" height="618" alt="image" src="https://github.com/user-attachments/assets/5e7a025d-def9-4e6f-b4ee-657bf27a01ab" />
+
+Preencha a sua cápsula com título, data de abertura e um texto para o seu futuro eu. Além disso, crie uma senha para a sua cápsula. Caso deseje editá-la, será necessário inserir essa senha. 
+
+<img width="728" height="879" alt="image" src="https://github.com/user-attachments/assets/6f04a38d-648f-4fc2-a3f9-cd338d07f8d3" />
+
+Assim que você criar uma cápsula, ela ficará salva no seu perfil. Para ver todas as suas cápsulas criadas, basta clicar em "Cápsulas". 
+
+<img width="1259" height="727" alt="image" src="https://github.com/user-attachments/assets/b2276c0c-63d6-4d2f-bc9b-54a2080c54de" />
+
+### 5. Edição de cápsulas do tempo
+Para editar uma cápsula do tempo, clique em "Editar". É necessário inserir a senha que você definiu no momento da criação. 
+
+<img width="438" height="372" alt="image" src="https://github.com/user-attachments/assets/04728ae3-e46a-40c3-a479-54f67e2d9832" />
+
+<img width="472" height="659" alt="image" src="https://github.com/user-attachments/assets/7e51a6e6-79d5-4774-9973-2f8c0aabbb97" />
+
+<img width="431" height="596" alt="image" src="https://github.com/user-attachments/assets/146d9efe-b103-49ad-92d4-9fa163f56761" />
+
+
+Quando estiver satisfeito com as suas mudanças, clique em "Salvar".
+
+### 6. Recuperação de senha
+
 ---
 
 ## Relatório de Testes
 
 ---
+
