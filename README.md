@@ -16,7 +16,10 @@ A **Cápsula do Tempo** foi concebida como uma ferramenta de preservação de me
 - Recuperação de senha através do envio de e-mails via terminal.
 - Controle de acesso por usuário.
 - Interface personalizada com animações CSS.
+- Testes unitários.
 - Deploy do site.
+
+Tudo o que foi desenvolvido está funcionando.
 
 ---
 
@@ -50,11 +53,15 @@ python manage.py runserver
 ### 1. Primeiro acesso e registro
 Ao acessar o site, há uma página inicial com as opções "Cápsulas", "Criar cápsula", "Login", "Registrar" e "Esqueci senha". Além disso, há uma breve explicação sobre o conceito das cápsulas do tempo. Para criar o seu usuário, escolha a opção "Registrar".
 
-<img width="1351" height="716" alt="image" src="https://github.com/user-attachments/assets/0ba0552a-1e8a-407a-8de8-fba8e6939627" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/0ba0552a-1e8a-407a-8de8-fba8e6939627" width="700px" />
+</div>
 
 Preencha todos os campos do formulário e clique em "Cadastrar".
 
-<img width="1237" height="875" alt="image" src="https://github.com/user-attachments/assets/0925034e-2cde-4294-b62a-671b822abb39" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/0925034e-2cde-4294-b62a-671b822abb39" width="700px" />
+</div>
 
 Se os campos tiverem sido preenchidos corretamente, você será direcionado à página de login. Caso contrário, corrija os campos que estiverem indicados com erro no formulário. 
 
@@ -62,55 +69,97 @@ Se os campos tiverem sido preenchidos corretamente, você será direcionado à p
 
 A opção de login pode ser acessada através da página inicial clicando em "Login".
 
-<img width="1529" height="760" alt="image" src="https://github.com/user-attachments/assets/dc6aa41a-1196-4869-a2e5-844257bdee95" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/dc6aa41a-1196-4869-a2e5-844257bdee95" width="700px" />
+</div>
 
-Preencha o formulário com o username e a senha que você criou ao se registrar no site. Caso tenha esquecido a sua senha, veja a seção "Recuperação de senha".
+Preencha o formulário com o username e a senha que você criou ao se registrar no site. Caso tenha esquecido a sua senha, veja a seção 6 (Recuperação de senha).
 
-<img width="1259" height="834" alt="image" src="https://github.com/user-attachments/assets/8efe8a51-1f1a-4c13-80c9-a3aa6e1c21bc" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/8efe8a51-1f1a-4c13-80c9-a3aa6e1c21bc" width="700px" />
+</div>
 
 ### 3. Edição do perfil
 Para editar seu perfil, clique em "Olá, [seu username] ou na imagem da moldura no topo direito do site.
 
-<img width="1714" height="382" alt="image" src="https://github.com/user-attachments/assets/8896411e-c461-42f5-ad88-709a3375bda1" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/8896411e-c461-42f5-ad88-709a3375bda1" width="700px" />
+</div>
 
 Altere as informações que desejar por meio do formulário e clique em "Salvar" ou clique em "Alterar senha" caso deseje trocar a sua senha.
 
-<img width="684" height="793" alt="image" src="https://github.com/user-attachments/assets/dc184633-8161-4cc5-a61a-bc73677d9bd1" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/dc184633-8161-4cc5-a61a-bc73677d9bd1" width="400px" />
+</div>
 
 Para alterar a sua senha, insira a senha antiga e confirme. 
 
-<img width="637" height="897" alt="image" src="https://github.com/user-attachments/assets/40f88264-18f7-4465-a8f7-9507ffcab616" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/40f88264-18f7-4465-a8f7-9507ffcab616" width="400px" />
+</div>
 
 ### 4. Criação de cápsulas do tempo
-Para criar uma cápsula do tempo, você precisa estar logado. Para mais informações sobre registro e login, veja as seções 1 e 2. Quando estiver pronto, clique em "Criar cápsula".
+Para criar uma cápsula do tempo, você precisa estar logado. Para mais informações sobre registro e login, veja as seções 1 (Primeiro acesso e registro) e 2 (Login). Quando estiver pronto, clique em "Criar cápsula".
 
-<img width="984" height="618" alt="image" src="https://github.com/user-attachments/assets/5e7a025d-def9-4e6f-b4ee-657bf27a01ab" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/5e7a025d-def9-4e6f-b4ee-657bf27a01ab" width="700px" />
+</div>
 
 Preencha a sua cápsula com título, data de abertura e um texto para o seu futuro eu. Além disso, crie uma senha para a sua cápsula. Caso deseje editá-la, será necessário inserir essa senha. 
 
-<img width="728" height="879" alt="image" src="https://github.com/user-attachments/assets/6f04a38d-648f-4fc2-a3f9-cd338d07f8d3" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/6f04a38d-648f-4fc2-a3f9-cd338d07f8d3" width="450px" />
+</div>
 
 Assim que você criar uma cápsula, ela ficará salva no seu perfil. Para ver todas as suas cápsulas criadas, basta clicar em "Cápsulas". 
 
-<img width="1259" height="727" alt="image" src="https://github.com/user-attachments/assets/b2276c0c-63d6-4d2f-bc9b-54a2080c54de" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/b2276c0c-63d6-4d2f-bc9b-54a2080c54de" width="700px" />
+</div>
 
 ### 5. Edição de cápsulas do tempo
 Para editar uma cápsula do tempo, clique em "Editar". É necessário inserir a senha que você definiu no momento da criação. 
 
-<img width="438" height="372" alt="image" src="https://github.com/user-attachments/assets/04728ae3-e46a-40c3-a479-54f67e2d9832" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/04728ae3-e46a-40c3-a479-54f67e2d9832" width="350px" />
+</div>
 
-<img width="472" height="659" alt="image" src="https://github.com/user-attachments/assets/7e51a6e6-79d5-4774-9973-2f8c0aabbb97" />
+<div align="center">
+<img src="https://github.com/user-attachments/assets/7e51a6e6-79d5-4774-9973-2f8c0aabbb97" width="350px" />
+</div>
 
-<img width="431" height="596" alt="image" src="https://github.com/user-attachments/assets/146d9efe-b103-49ad-92d4-9fa163f56761" />
-
+<div align="center">
+<img src="https://github.com/user-attachments/assets/146d9efe-b103-49ad-92d4-9fa163f56761" width="350px" />
+</div>
 
 Quando estiver satisfeito com as suas mudanças, clique em "Salvar".
 
+⚠️ Não é possível editar cápsulas após a sua data de abertura.
+
 ### 6. Recuperação de senha
+A recuperação de senha ocorre através do envio de um e-mail pelo terminal. Nesse e-mail, há um link que leva a uma página onde o usuário pode inserir sua nova senha. Como a recuperação é feita pelo terminal, não está disponível pelo site, mas pode ser testada localmente. Para isso, clique em "Esqueci senha".
 
----
+<div align="center">
+<img src="https://github.com/user-attachments/assets/c04c351f-9a68-4cc6-95da-aaede1142b24" width="700px" />
+</div>
 
-## Relatório de Testes
+Digite o e-mail relacionado à sua conta.
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/c1e84579-8eaa-430a-9125-0fb64191db9d" width="700px" />
+</div>
+
+Ao seguir o link enviado no terminal, você será redirecionado para a página abaixo, onde poderá redefinir a sua senha. 
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/bfb3771f-6328-42ca-b55a-6ea5b970ccc7" width="700px" />
+</div>
+
+Após digitar sua nova senha, clique em "Redefinir senha" e pronto.
+
+## Sobre a abertura das cápsulas do tempo
+Ao criar uma cápsula, ela permanecerá selada até a sua data de abertura. Portanto, não será possível visualizar o conteúdo de uma cápsula imediatamente após a sua criação. No entanto, é possível editar o conteúdo por meio de uma senha, definida no momento da criação. Para mais informações sobre isso, veja as seções 4 (Criação de cápsulas do tempo) e 5 (Edição de cápsulas do tempo). Assim que passar a data de abertura de uma cápsula, seu conteúdo poderá ser aberto e ficará disponível para ser visualizado sempre que desejar, mas não poderá mais ser editado. 
+
 
 ---
 
