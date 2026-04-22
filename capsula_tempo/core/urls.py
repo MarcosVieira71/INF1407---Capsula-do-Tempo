@@ -1,7 +1,7 @@
 from django.urls import path
 
 from core.views import ListaCapsulas, DeletarCapsula, CriarCapsula, CapsulaDetail
-from core.views import UsuarioLoginView, UsuarioLogoutView, UsuarioCriaView, UsuarioAtualizaView, UsuarioAtualizaSenhaView
+from core.views import UsuarioLoginView, UsuarioLogoutView, UsuarioCriaView, UsuarioAtualizaView, UsuarioAtualizaSenhaView, UsuarioExcluirView
 from core.views import UsuarioPasswordResetView, UsuarioPasswordResetDoneView, UsuarioPasswordResetConfirmView 
 from core.views import UsuarioPasswordResetCompleteView, HomeView
 from core.views import AutorizarEdicaoView, EditarCapsulaView
@@ -24,4 +24,5 @@ urlpatterns = [
     path('autorizar_edicao/<int:pk>/', AutorizarEdicaoView.as_view(), name='autorizar_edicao'),
     path('editar_texto/<int:itemtexto_pk>/', EditarCapsulaView.as_view(), name='editar_itemtexto'),
     path('perfil/senha/', UsuarioAtualizaSenhaView.as_view(), name='alterar_senha'),
+    path('perfil/excluir/', UsuarioExcluirView.as_view(), name='perfil_excluir'),
 ]

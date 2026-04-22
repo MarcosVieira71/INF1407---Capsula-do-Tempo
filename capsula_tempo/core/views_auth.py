@@ -19,6 +19,10 @@ from django.contrib.auth.views import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
+from django.views import View
+from django.shortcuts import redirect, render
+from django.contrib.auth import logout
+from django.contrib import messages
 
 from .models import Usuario
 from .forms import UsuarioCriarForm, UsuarioAtualizarForm
@@ -69,6 +73,27 @@ class UsuarioAtualizaSenhaView(LoginRequiredMixin, SuccessMessageMixin, Password
     template_name = 'alterar_senha.html'
     success_url = reverse_lazy('perfil')
     success_message = "Sua senha foi alterada com sucesso!"
+
+
+class UsuarioExcluirView(LoginRequiredMixin, View):
+    """
+    Permite que o usuário autenticado exclua sua própria conta.
+
+    A exclusão exige um POST. Realiza logout antes
+    de remover o usuário e redireciona para a página inicial com uma mensagem.
+    """
+
+    def get(self, request, *args, **kwargs):
+        """Renderiza a página de confirmação de exclusão"""
+        return render(request, 'perfil_excluir_confirm.html')
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        # Logout para encerrar a sessão antes de deletar o usuário
+        logout(request)
+        user.delete()
+        messages.success(request, "Sua conta foi excluída com sucesso.")
+        return redirect(reverse_lazy('home'))
 
 class HomeView(TemplateView):
     """Exibe a página inicial pública ou de boas-vindas do projeto."""

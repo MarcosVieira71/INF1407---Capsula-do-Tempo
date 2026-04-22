@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Confirmar exclusão da conta</h2>
+    <p>Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.</p>
+    <form method="post" action="{% url 'perfil_excluir' %}">
+        {% csrf_token %}
+        <button type="submit" style="background:#c94b4b;color:white;border:none;padding:8px 12px;border-radius:4px;">Sim, excluir minha conta</button>
+        <a href="{% url 'perfil' %}" style="margin-left:1em;">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
