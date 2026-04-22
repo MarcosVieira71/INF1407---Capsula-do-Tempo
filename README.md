@@ -97,7 +97,8 @@ Para editar seu perfil, clique em "Olá, [seu username] ou na imagem da moldura 
 Altere as informações que desejar por meio do formulário e clique em "Salvar" ou clique em "Alterar senha" caso deseje trocar a sua senha.
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/dc184633-8161-4cc5-a61a-bc73677d9bd1" width="400px" />
+<img alt="image" src="https://github.com/user-attachments/assets/f35754c1-036c-4904-ab44-91e8a707de3f"  width="400px" />
+
 </div>
 
 Para alterar a sua senha, insira a senha antiga e confirme a nova. 
@@ -164,6 +165,22 @@ Ao seguir o link enviado no terminal, você será redirecionado para a página a
 </div>
 
 Após digitar sua nova senha, clique em "Redefinir senha" e pronto.
+
+### 7. Exclusão de cápsulas do tempo
+Para excluir uma cápsula, basta clicar em "Excluir" e confirmar a sua escolha. 
+
+<div align="center">
+<img width="1128" height="575" alt="image" src="https://github.com/user-attachments/assets/94b7a24e-5133-4fc3-9fcf-5b84ebecafb5" width="700px"/>
+</div>
+
+### 8. Exclusão de conta
+Para excluir sua conta, vá para a edição do perfil (ver seção 3), clique em "Excluir conta" e confirme sua escolha. 
+
+<div align="center">
+<img alt="image" src="https://github.com/user-attachments/assets/c0fe6669-8587-4807-831c-a4d9104538d0" width="400px" />
+</div>
+
+</div>
 
 ## Sobre a abertura das cápsulas do tempo
 Ao criar uma cápsula, ela permanecerá selada até a sua data de abertura. Portanto, não será possível visualizar o conteúdo de uma cápsula imediatamente após a sua criação. No entanto, é possível editar o conteúdo por meio de uma senha, definida no momento da criação. Para mais informações sobre isso, veja as seções 4 (Criação de cápsulas do tempo) e 5 (Edição de cápsulas do tempo). Assim que passar a data de abertura de uma cápsula, seu conteúdo poderá ser aberto e ficará disponível para ser visualizado sempre que desejar, mas não poderá mais ser editado. 
