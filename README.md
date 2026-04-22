@@ -19,7 +19,7 @@ A **Cápsula do Tempo** foi concebida como uma ferramenta de preservação de me
 - Testes unitários.
 - Deploy do site.
 
-Tudo o que foi desenvolvido está funcionando.
+Tudo o que foi desenvolvido está funcionando. A princípio, tínhamos pensado em desenvolver uma cápsula do tempo com imagens e links além de texto, mas ao longo do desenvolvimento percebemos que as imagens e links não faziam tanto sentido para a proposta do nosso site.
 
 ---
 
